@@ -3,12 +3,13 @@ package com.tfreitasms.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.tfreitasms.cursomc.domain.Categoria;
 import com.tfreitasms.cursomc.repositories.CategoriaRepository;
-
-import com.tfreitasms.cursomc.services.exceptions.*;
+import com.tfreitasms.cursomc.services.exceptions.DataIntegrityException;
+import com.tfreitasms.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -21,14 +22,25 @@ public class CategoriaService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
-	
+
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);
 		return repo.save(obj);
 	}
-	
+
 	public Categoria update(Categoria obj) {
 		find(obj.getId());
 		return repo.save(obj);
+	}
+
+	public void delete(Integer id) {
+		find(id);
+		try {
+			 repo.deleteById(id);
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos");
+		}
+		
 	}
 }
