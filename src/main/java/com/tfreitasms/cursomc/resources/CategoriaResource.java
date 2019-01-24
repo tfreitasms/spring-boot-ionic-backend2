@@ -37,7 +37,7 @@ public class CategoriaResource {
 
 	}
 
-	@PreAuthorize("hasAntRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto) {
 		Categoria obj = service.fromDTO(objDto);
@@ -46,7 +46,7 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@PreAuthorize("hasAntRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
 		Categoria obj = service.fromDTO(objDto);
@@ -55,7 +55,7 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PreAuthorize("hasAntRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
